@@ -21,6 +21,7 @@
     "serverless-plugin-include-dependencies": "^5.0.0"
   },
   "dependencies": {
+    "aws-sdk": "^2.1209.0",
     "glob": "^8.0.3",
     "postman-collection": "^4.1.5"
   }

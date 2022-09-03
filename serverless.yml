@@ -10,6 +10,17 @@ provider:
     region: ap-southeast-1
     deploymentBucket:
         name: serverless-base-dev-bucket
+    environment:
+        BUCKET_NAME: ${self:service}-${sls:stage}-postman-import-json
+    iam:
+        role:
+            statements:
+                - Effect: 'Allow'
+                  Action: 's3:*'
+                  Resource: '*'
+
+resources:
+    - ${file(./resources/s3.yml)}
 
 functions:
     - ${file(./resources/functions.yml)}

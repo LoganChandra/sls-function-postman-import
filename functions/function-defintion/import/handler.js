@@ -1,13 +1,15 @@
 const { okResponse, errResponse } = require('../../utils/response.js');
-const { Collection, Item, Header } = require('postman-collection');
+const { Collection, Item } = require('postman-collection');
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3();
+const BUCKET_NAME = process.env.BUCKET_NAME;
 
 module.exports.lambda_handler = async (event) => {
 	const { requestId } = event.requestContext;
-	const { definition, apiEndpoint, apiName, headers } = JSON.parse(event.body);
+	const { definition, apiEndpoint, apiName, requestHeader } = JSON.parse(event.body);
 
 	try {
-		// DEFINING THE HEADERS
-		const requestHeader = createHeader(headers)
+
 
 		// CREATING POSTMAN COLLECTION
 		const postmanCollection = new Collection({
@@ -27,8 +29,12 @@ module.exports.lambda_handler = async (event) => {
 		// JSONIFYING COLLECTION
 		const collectionJSON = postmanCollection.toJSON();
 
+		// GENERATING SIGNED URL
+		let fileKey = `${apiName.replace(" ", "_").toUpperCase()}${new Date().toISOString()}`
+		let signedURL = await getSignedUrl(collectionJSON, fileKey)
+
 		return okResponse({
-			data: collectionJSON,
+			data: signedURL,
 		});
 	} catch (e) {
 		console.log("ERROR", e)
@@ -41,17 +47,8 @@ module.exports.lambda_handler = async (event) => {
 	}
 };
 
-// CREATE HEADERS FOR THE REQUEST
-function createHeader(headers) {
-	// EXAMPLE: 'Authorization:\nContent-Type:application/json\ncache-control:no-cache\n';
-	const rawHeaderString = headers;
-	const rawHeaders = Header.parse(rawHeaderString);
-	return rawHeaders.map((h) => new Header(h));
-}
-
 // CREATING THE REQUESTS
 function createRequest(functionName, details, requestHeader, apiEndpoint) {
-	console.log("functionName, details, requestHeader, apiEndpoint", JSON.stringify(functionName), JSON.stringify(details), JSON.stringify(requestHeader), JSON.stringify(apiEndpoint))
 	let httpEvent = (details?.events || []).filter(ele => ele.http != undefined)[0]
 	let postmanRequest = new Item({
 		name: functionName,
@@ -69,4 +66,24 @@ function createRequest(functionName, details, requestHeader, apiEndpoint) {
 		}
 	});
 	return postmanRequest
+}
+
+// GET SIGNED URL FROM S3
+async function getSignedUrl(Obj, key) {
+
+	const putS3Params = {
+		Bucket: BUCKET_NAME,
+		Key: key,
+		Body: JSON.stringify(Obj),
+	};
+	const presignedParams = { Bucket: BUCKET_NAME, Key: key, Expires: 120 };
+
+	await s3.putObject(putS3Params).promise();
+
+	const signedUrl = await s3.getSignedUrlPromise(
+		'getObject',
+		presignedParams
+	);
+
+	return signedUrl
 }
