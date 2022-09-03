@@ -30,7 +30,7 @@ module.exports.lambda_handler = async (event) => {
 		const collectionJSON = postmanCollection.toJSON();
 
 		// GENERATING SIGNED URL
-		let fileKey = `${apiName.replace(" ", "_").toUpperCase()}${new Date().toISOString()}`
+		let fileKey = `${apiName.replace(" ", "_").toUpperCase()}${new Date().toISOString()}.json`
 		let signedURL = await getSignedUrl(collectionJSON, fileKey)
 
 		return okResponse({

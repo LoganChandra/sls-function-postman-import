@@ -1,5 +1,5 @@
 importFunctionDefinition:
-    handler: functions/function-defintion/import/handler.lambda_handler
+    handler: functions/postman/import/handler.lambda_handler
     timeout: 30
     memorySize: 256
     reservedConcurrency: 4
