@@ -1,0 +1,29 @@
+service: sls-function-postman-import
+
+frameworkVersion: '3'
+
+provider:
+    name: aws
+    architecture: arm64
+    runtime: nodejs16.x
+    stage: dev
+    region: ap-southeast-1
+    deploymentBucket:
+        name: serverless-base-dev-bucket
+
+functions:
+    - ${file(./resources/functions.yml)}
+
+plugins:
+    - serverless-plugin-common-excludes
+    - serverless-plugin-include-dependencies
+
+custom:
+    includeDependencies:
+        enableCaching: true
+    prune:
+        automatic: true
+        number: 2
+
+package:
+    individually: true

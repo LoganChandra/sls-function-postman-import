@@ -1,0 +1,25 @@
+importFunctionDefinition:
+    handler: functions/function-defintion/import/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: "logan.chandra@ecloudvalley.com"
+        Environment: ${sls:stage}
+        ProjectName: "sls-function-postman-import"
+        ServiceName: sls-function-postman-import-${sls:stage}
+    events:
+        - http:
+              path: import
+              method: post
+              cors:
+                  origin: "*"
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - type
+                  allowCredentials: false

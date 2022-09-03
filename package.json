@@ -1,0 +1,27 @@
+{
+  "name": "sls-function-postman-import",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LoganChandra/sls-function-postman-import.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LoganChandra/sls-function-postman-import/issues"
+  },
+  "homepage": "https://github.com/LoganChandra/sls-function-postman-import#readme",
+  "devDependencies": {
+    "serverless-plugin-common-excludes": "^4.0.0",
+    "serverless-plugin-include-dependencies": "^5.0.0"
+  },
+  "dependencies": {
+    "glob": "^8.0.3",
+    "postman-collection": "^4.1.5"
+  }
+}
