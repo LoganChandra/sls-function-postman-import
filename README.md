@@ -4,7 +4,7 @@ This package allows you to generate a JSON from a cloudformation function defini
 # Installing the SDK:
 Postman Collection SDK can be installed using NPM or directly from the git repository within your NodeJS projects. If installing from NPM, the following command installs the SDK and saves in your ```package.json```
 
-```> npm install clf-lambda-definition-2-postman-collection --save```
+```> npm install clf-lambda-definition-2-postman-collection```
 
 
 
@@ -12,14 +12,10 @@ Postman Collection SDK can be installed using NPM or directly from the git repos
 To use the package you can run the following command.
 
 ```
-npm run create-postman-json 
-    --definition=functions.yml 
-    --endpoint=https://httpbin.org/api
-    --name="test-api" 
-    --headers=headers.json
+npx clf-lambda-definition-2-postman-collection functions.yml https://httpbin.org/api test-api headers.json
 ```
 
-# Variables:
+# Variables (In order):
 ### definition:
 ##### Path to the cloudformation function definition as a YML file.
 ### endpoint:
