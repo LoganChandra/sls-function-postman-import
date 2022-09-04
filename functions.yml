@@ -1,20 +1,17 @@
-mcdnAuthorizer:
-    handler: functions/authorizer/handler.handler
-
-getSites:
-    handler: functions/sites/get-sites/handler.lambda_handler
+get_site:
+    handler: functions/sites/get-site/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
         CreatedBy: 'shashenta.rao@ecloudvalley.com'
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: mcdn/sites/list
-              method: get
+              path: dynamodb/get-site
+              method: POST
               cors:
                   origin: '*'
                   headers:
@@ -24,27 +21,22 @@ getSites:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
-addSite:
-    handler: functions/sites/add-site/handler.lambda_handler
+
+get-site-by-id:
+    handler: functions/sites/get-site-by-id/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
         CreatedBy: 'shashenta.rao@ecloudvalley.com'
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: mcdn/sites/add
-              method: post
+              path: dynamodb/get-site-by-id
+              method: POST
               cors:
                   origin: '*'
                   headers:
@@ -54,28 +46,22 @@ addSite:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
 
-deleteSite:
-    handler: functions/sites/delete-site/handler.lambda_handler
+get_site_username:
+    handler: functions/sites/get-site-username/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
         CreatedBy: 'shashenta.rao@ecloudvalley.com'
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: mcdn/sites/{id}
-              method: delete
+              path: dynamodb/get-site-username
+              method: POST
               cors:
                   origin: '*'
                   headers:
@@ -85,121 +71,22 @@ deleteSite:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
 
-getSiteNS:
-    handler: functions/sites/get-site-ns/handler.lambda_handler
+get-site-by-scope:
+    handler: functions/sites/get-site-by-scope/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
-    tags:
-        CreatedBy: 'shashenta.rao@ecloudvalley.com'
-        Environment: ${sls:stage}
-        ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
-    events:
-        - http:
-              path: mcdn/sites/ns/{id}
-              method: get
-              cors:
-                  origin: '*'
-                  headers:
-                      - Content-Type
-                      - X-Amz-Date
-                      - Authorization
-                      - X-Api-Key
-                      - X-Amz-Security-Token
-                      - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
-                  allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
-
-getSiteDetails:
-    handler: functions/sites/get-site-details/handler.lambda_handler
-    timeout: 30
-    memorySize: 256
-    reservedConcurrency: 4
-    tags:
-        CreatedBy: 'shashenta.rao@ecloudvalley.com'
-        Environment: ${sls:stage}
-        ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
-    events:
-        - http:
-              path: mcdn/sites/{id}
-              method: get
-              cors:
-                  origin: '*'
-                  headers:
-                      - Content-Type
-                      - X-Amz-Date
-                      - Authorization
-                      - X-Api-Key
-                      - X-Amz-Security-Token
-                      - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
-                  allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
-
-updateSiteStatus:
-    handler: functions/sites/update-site-status/handler.lambda_handler
-    timeout: 30
-    memorySize: 256
-    reservedConcurrency: 4
-    tags:
-        CreatedBy: 'shashenta.rao@ecloudvalley.com'
-        Environment: ${sls:stage}
-        ProjectName: 'ECV MCDN MGMT TOOL'
-        ServiceName: mcdn-mgmt_tool-bff-${sls:stage}
-    events:
-        - http:
-              path: /mcdn/sites/status/{id}
-              method: patch
-              cors:
-                  origin: '*'
-                  headers:
-                      - Content-Type
-                      - X-Amz-Date
-                      - Authorization
-                      - X-Api-Key
-                      - X-Amz-Security-Token
-                      - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
-                  allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
-
-updateSite:
-    handler: functions/sites/update-site/handler.lambda_handler
-    timeout: 30
-    memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
         CreatedBy: 'logan.chandra@ecloudvalley.com'
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: /mcdn/sites/{id}
-              method: patch
+              path: dynamodb/get-site-by-scope
+              method: POST
               cors:
                   origin: '*'
                   headers:
@@ -209,28 +96,22 @@ updateSite:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
 
-nsLookup:
-    handler: functions/sites/ns-lookup/handler.lambda_handler
+get_all_site:
+    handler: functions/sites/get-all-sites/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
         CreatedBy: 'shashenta.rao@ecloudvalley.com'
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: mcdn/sites/nsLookup/{website_domain}
-              method: get
+              path: dynamodb/site/list
+              method: GET
               cors:
                   origin: '*'
                   headers:
@@ -240,61 +121,22 @@ nsLookup:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
 
-# TO IMPLEMENT MAN LEONG'S NEW LOGIC
-
-# get_distribution_usage_csv:
-#     handler: functions/get_distribution_usage_csv/handler.lambda_handler
-#     timeout: 30
-#     memorySize: 256
-#     reservedConcurrency: 4
-#     tags:
-#         CreatedBy: 'shashenta.rao@ecloudvalley.com'
-#         Environment: ${sls:stage}
-#         ProjectName: 'ECV MCDN'
-#         ServiceName: mcdn-bff-${sls:stage}
-#     events:
-#         - http:
-#               path: site/usage/export
-#               method: get
-#               cors:
-#                   origin: '*'
-#                   headers:
-#                       - Content-Type
-#                       - X-Amz-Date
-#                       - Authorization
-#                       - X-Api-Key
-#                       - X-Amz-Security-Token
-#                       - X-Amz-User-Agent
-#                       - authorizationToken
-#                       - type
-#                   allowCredentials: false
-#               authorizer:
-#                   name: mcdnAuthorizer
-#                   resultTtlInSeconds: 0
-#                   identitySource: method.request.header.authorizationToken
-
-getSiteUsage:
-    handler: functions/usage/get-site-usage/handler.lambda_handler
+get_permission:
+    handler: functions/groups/get-group/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
-        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        CreatedBy: 'shashenta.rao@ecloudvalley.com'
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: mcdn/usage/list
-              method: post
+              path: dynamodb/permission
+              method: GET
               cors:
                   origin: '*'
                   headers:
@@ -304,28 +146,22 @@ getSiteUsage:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
 
-listUsers:
-    handler: functions/users/list-users/handler.lambda_handler
+get_permission-details:
+    handler: functions/groups/get-group-detail/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
-        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        CreatedBy: 'shashenta.rao@ecloudvalley.com'
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: mcdn/users/list
-              method: get
+              path: dynamodb/permission/{role}
+              method: GET
               cors:
                   origin: '*'
                   headers:
@@ -335,59 +171,113 @@ listUsers:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
 
-addUser:
+delete_permission:
+    handler: functions/groups/delete-group/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 15
+    tags:
+        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-dynamodb-${sls:stage}
+    events:
+        - http:
+              path: dynamodb/permission/{role}
+              method: DELETE
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                  allowCredentials: false
+
+update_permission:
+    handler: functions/groups/update-group/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 15
+    tags:
+        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-dynamodb-${sls:stage}
+    events:
+        - http:
+              path: dynamodb/permission/{role}
+              method: PATCH
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                  allowCredentials: false
+
+post_permission:
+    handler: functions/groups/post-group/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 15
+    tags:
+        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-dynamodb-${sls:stage}
+    events:
+        - http:
+              path: dynamodb/permission
+              method: POST
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                  allowCredentials: false
+
+add-user:
     handler: functions/users/add-user/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
-        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        CreatedBy: shashenta.rao@ecloudvalley.com
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
-        - http:
-              path: mcdn/users/add
-              method: post
-              cors:
-                  origin: '*'
-                  headers:
-                      - Content-Type
-                      - X-Amz-Date
-                      - Authorization
-                      - X-Api-Key
-                      - X-Amz-Security-Token
-                      - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
-                  allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
+        - cognitoUserPool:
+              pool: ${self:provider.environment.MCDN_USER_POOL}
+              trigger: PreSignUp
+              existing: true
 
-updateUserStatus:
-    handler: functions/users/update-user-status/handler.lambda_handler
+update-user:
+    handler: functions/users/update-user/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
-        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        CreatedBy: shashenta.rao@ecloudvalley.com
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: mcdn/users/status/{userId}
-              method: patch
+              path: dynamodb/user
+              method: PATCH
               cors:
                   origin: '*'
                   headers:
@@ -397,30 +287,22 @@ updateUserStatus:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
 
-# WE DONT NEED AUTHORIZER
-# TO DISABLE CUSTOMER WHO REGISTERS THROUGH PORTAL
-disableRegisteredUser:
-    handler: functions/users/disable-registered-user/handler.lambda_handler
+get-users:
+    handler: functions/users/get-users/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
-        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        CreatedBy: shashenta.rao@ecloudvalley.com
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: mcdn/users/disable/{userId}
-              method: patch
+              path: dynamodb/users
+              method: GET
               cors:
                   origin: '*'
                   headers:
@@ -430,24 +312,22 @@ disableRegisteredUser:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
 
-updateUserRole:
-    handler: functions/users/update-user-role/handler.lambda_handler
+get-user-details:
+    handler: functions/users/get-user-details/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
-        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        CreatedBy: shashenta.rao@ecloudvalley.com
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: mcdn/users/role/{userId}
-              method: patch
+              path: dynamodb/user/detail/{id}
+              method: GET
               cors:
                   origin: '*'
                   headers:
@@ -457,28 +337,22 @@ updateUserRole:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
 
-deleteUser:
-    handler: functions/users/delete-user/handler.lambda_handler
+get-user-email:
+    handler: functions/users/get-user-email/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
-        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        CreatedBy: shashenta.rao@ecloudvalley.com
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: mcdn/users/{userId}
-              method: delete
+              path: dynamodb/user/email/{email}
+              method: GET
               cors:
                   origin: '*'
                   headers:
@@ -488,28 +362,23 @@ deleteUser:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
 
-getUserRole:
+# For MCDN
+get-user-role:
     handler: functions/users/get-user-role/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
-        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        CreatedBy: logan.chandra@ecloudvalley.com
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: mcdn/users/role/{userId}
-              method: get
+              path: dynamodb/user/role/{user_id}
+              method: GET
               cors:
                   origin: '*'
                   headers:
@@ -519,28 +388,22 @@ getUserRole:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
 
-listRoles:
-    handler: functions/roles/list-roles/handler.lambda_handler
+list-user-role:
+    handler: functions/users/list-user-role/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
-        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        CreatedBy: logan.chandra@ecloudvalley.com
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: mcdn/roles/list
-              method: get
+              path: dynamodb/user/list/role
+              method: GET
               cors:
                   origin: '*'
                   headers:
@@ -550,28 +413,22 @@ listRoles:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
 
-getAccessLogs:
-    handler: functions/access-log/get-access-logs/handler.lambda_handler
+delete-user:
+    handler: functions/users/delete-user/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
-        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        CreatedBy: shashenta.rao@ecloudvalley.com
         Environment: ${sls:stage}
-        ProjectName: 'ECV MCDN MGMT TOOL'
-        ServiceName: mcdn-mgmt_tool-bff-${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: /mcdn/access-log/list
-              method: post
+              path: dynamodb/user/delete/{id}
+              method: DELETE
               cors:
                   origin: '*'
                   headers:
@@ -581,28 +438,22 @@ getAccessLogs:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
 
-importCertificate:
-    handler: functions/certificates/import-cert/handler.lambda_handler
+get-configs:
+    handler: functions/configs/get-configs/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
-        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        CreatedBy: shashenta.rao@ecloudvalley.com
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: mcdn/certificate/add
-              method: post
+              path: dynamodb/configs/{setting}
+              method: GET
               cors:
                   origin: '*'
                   headers:
@@ -612,28 +463,22 @@ importCertificate:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
 
-listCertificate:
-    handler: functions/certificates/list-cert/handler.lambda_handler
+delete-config:
+    handler: functions/configs/delete-user-config/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
-        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        CreatedBy: shashenta.rao@ecloudvalley.com
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: mcdn/certificate/list
-              method: get
+              path: dynamodb/configs/delete/{id}
+              method: DELETE
               cors:
                   origin: '*'
                   headers:
@@ -643,28 +488,52 @@ listCertificate:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
 
-getCertificate:
-    handler: functions/certificates/get-cert/handler.lambda_handler
+add-access-log:
+    handler: functions/access-logs/post-logs/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
-        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        CreatedBy: shashenta.rao@ecloudvalley.com
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
+    events:
+        - sqs:
+              arn: !ImportValue mcdn-mgmt-bff-${sls:stage}-access-log-queue
+              batchSize: 10
+
+add-mcdn-access-log:
+    handler: functions/access-logs/post-mcdn-logs/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 15
+    tags:
+        CreatedBy: shashenta.rao@ecloudvalley.com
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-dynamodb-${sls:stage}
+    events:
+        - sqs:
+              arn: !ImportValue mcdn-bff-${sls:stage}-access-log-queue
+              batchSize: 10
+
+get-access-log:
+    handler: functions/access-logs/get-logs/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 15
+    tags:
+        CreatedBy: shashenta.rao@ecloudvalley.com
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: mcdn/certificate/{id}
-              method: get
+              path: dynamodb/access-logs/list
+              method: POST
               cors:
                   origin: '*'
                   headers:
@@ -674,27 +543,122 @@ getCertificate:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
 
-deleteCertificate:
-    handler: functions/certificates/delete-cert/handler.lambda_handler
+get-mcdn-log:
+    handler: functions/access-logs/get-mcdn-logs/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
+    tags:
+        CreatedBy: shashenta.rao@ecloudvalley.com
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-dynamodb-${sls:stage}
+    events:
+        - http:
+              path: dynamodb/mcdn-logs/list
+              method: POST
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                  allowCredentials: false
+
+get-site-usage:
+    handler: functions/usage/get-site-usage/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 15
+    tags:
+        CreatedBy: shashenta.rao@ecloudvalley.com
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-dynamodb-${sls:stage}
+    events:
+        - http:
+              path: dynamodb/site-usage/list
+              method: POST
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                  allowCredentials: false
+
+# CERTIFICATES
+get-cert-by-scope:
+    handler: functions/certificate/get-cert-by-scope/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 15
     tags:
         CreatedBy: 'logan.chandra@ecloudvalley.com'
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: mcdn/certificate/{id}
+              path: dynamodb/get-cert-by-scope
+              method: POST
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                  allowCredentials: false
+
+get-cert:
+    handler: functions/certificate/get-cert/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 15
+    tags:
+        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-dynamodb-${sls:stage}
+    events:
+        - http:
+              path: dynamodb/get-cert
+              method: POST
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                  allowCredentials: false
+
+delete-cert:
+    handler: functions/certificate/delete-cert/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 15
+    tags:
+        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-dynamodb-${sls:stage}
+    events:
+        - http:
+              path: dynamodb/delete-cert/{certId}
               method: delete
               cors:
                   origin: '*'
@@ -705,28 +669,22 @@ deleteCertificate:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
 
-getInvalidations:
-    handler: functions/invalidations/get-invalidations/handler.lambda_handler
+update-cert:
+    handler: functions/certificate/update-cert/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
-        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        CreatedBy: 'logan.chandra@ecloudvalley.com'
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: mcdn/invalidation/list
-              method: get
+              path: dynamodb/update-cert
+              method: patch
               cors:
                   origin: '*'
                   headers:
@@ -736,28 +694,22 @@ getInvalidations:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken
 
-addInvalidations:
-    handler: functions/invalidations/add-invalidations/handler.lambda_handler
+get_invalidation:
+    handler: functions/invalidations/get-invalidation/handler.lambda_handler
     timeout: 30
     memorySize: 256
-    reservedConcurrency: 4
+    reservedConcurrency: 15
     tags:
         CreatedBy: 'shashenta.rao@ecloudvalley.com'
         Environment: ${sls:stage}
         ProjectName: 'ECV MCDN'
-        ServiceName: mcdn-bff-${sls:stage}
+        ServiceName: mcdn-dynamodb-${sls:stage}
     events:
         - http:
-              path: mcdn/invalidation/add
-              method: post
+              path: dynamodb/invalidation/list
+              method: POST
               cors:
                   origin: '*'
                   headers:
@@ -767,10 +719,4 @@ addInvalidations:
                       - X-Api-Key
                       - X-Amz-Security-Token
                       - X-Amz-User-Agent
-                      - authorizationToken
-                      - type
                   allowCredentials: false
-              authorizer:
-                  name: mcdnAuthorizer
-                  resultTtlInSeconds: 0
-                  identitySource: method.request.header.authorizationToken

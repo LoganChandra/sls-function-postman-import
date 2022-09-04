@@ -1,28 +1,28 @@
 #! /usr/bin/env node
+
 const { Collection, Item } = require('postman-collection');
-const AWS = require('aws-sdk');
-const s3 = new AWS.S3();
-const BUCKET_NAME = process.env.BUCKET_NAME;
 const yaml = require('js-yaml')
 const fs = require('fs')
 
 
 const handler = async () => {
-	let definitionYML = process.env.npm_config_definitionyml
-	let apiEndpoint = process.env.npm_config_apiendpoint
-	let apiName = process.env.npm_config_apiname
-	let headerJSON = process.env.npm_config_headerjson
-
-	let inputfile = definitionYML,
-		definition = yaml.load(fs.readFileSync(inputfile, { encoding: 'utf-8' })),
-		requestHeader = fs.readFileSync(headerJSON, { encoding: 'utf-8' });
+	let definitionInput = process.argv[0 + 2],
+		endpoint = process.argv[1 + 2],
+		name = process.argv[2 + 2],
+		headers = process.argv[3 + 2];
 
 	try {
+
+		let inputfile = definitionInput
+		let fileSync = fs.readFileSync(inputfile, { encoding: 'utf-8' })
+		let filteredFileSync = fileSync.replace(/!ImportValue /g, "")
+		let definition = yaml.load(filteredFileSync)
+		let requestHeader = fs.readFileSync(headers, { encoding: 'utf-8' })
 
 		// CREATING POSTMAN COLLECTION
 		const postmanCollection = new Collection({
 			info: {
-				name: apiName
+				name: name
 			},
 			item: [],
 		});
@@ -30,7 +30,7 @@ const handler = async () => {
 		// ADDING ITEMS TO THE POSTMAN COLLECTIONS
 		Object.entries(definition).forEach(entry => {
 			const [key, value] = entry;
-			const postmanRequest = createRequest(key, value, requestHeader, apiEndpoint)
+			const postmanRequest = createRequest(key, value, requestHeader, endpoint)
 			postmanCollection.items.add(postmanRequest);
 		});
 
@@ -49,7 +49,7 @@ const handler = async () => {
 };
 
 // CREATING THE REQUESTS
-function createRequest(functionName, details, requestHeader, apiEndpoint) {
+function createRequest(functionName, details, requestHeader, endpoint) {
 	requestHeader = JSON.parse(requestHeader)
 	let httpEvent = (details?.events || []).filter(ele => ele.http != undefined)[0]
 	let postmanRequest = new Item({
@@ -57,9 +57,9 @@ function createRequest(functionName, details, requestHeader, apiEndpoint) {
 		request: {
 			header: requestHeader,
 			url: {
-				raw: `${apiEndpoint}/${httpEvent?.http?.path}`,
+				raw: `${endpoint}/${httpEvent?.http?.path}`,
 				host: [
-					apiEndpoint
+					endpoint
 				],
 				path: httpEvent?.http?.path.split('/')
 			},
@@ -68,25 +68,5 @@ function createRequest(functionName, details, requestHeader, apiEndpoint) {
 		}
 	});
 	return postmanRequest
-}
-
-// GET SIGNED URL FROM S3
-async function getSignedUrl(Obj, key) {
-
-	const putS3Params = {
-		Bucket: BUCKET_NAME,
-		Key: key,
-		Body: JSON.stringify(Obj),
-	};
-	const presignedParams = { Bucket: BUCKET_NAME, Key: key, Expires: 120 };
-
-	await s3.putObject(putS3Params).promise();
-
-	const signedUrl = await s3.getSignedUrlPromise(
-		'getObject',
-		presignedParams
-	);
-
-	return signedUrl
 }
 handler()
