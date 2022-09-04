@@ -1,0 +1,776 @@
+mcdnAuthorizer:
+    handler: functions/authorizer/handler.handler
+
+getSites:
+    handler: functions/sites/get-sites/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/sites/list
+              method: get
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+addSite:
+    handler: functions/sites/add-site/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/sites/add
+              method: post
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+deleteSite:
+    handler: functions/sites/delete-site/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/sites/{id}
+              method: delete
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+getSiteNS:
+    handler: functions/sites/get-site-ns/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/sites/ns/{id}
+              method: get
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+getSiteDetails:
+    handler: functions/sites/get-site-details/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/sites/{id}
+              method: get
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+updateSiteStatus:
+    handler: functions/sites/update-site-status/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN MGMT TOOL'
+        ServiceName: mcdn-mgmt_tool-bff-${sls:stage}
+    events:
+        - http:
+              path: /mcdn/sites/status/{id}
+              method: patch
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+updateSite:
+    handler: functions/sites/update-site/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: /mcdn/sites/{id}
+              method: patch
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+nsLookup:
+    handler: functions/sites/ns-lookup/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/sites/nsLookup/{website_domain}
+              method: get
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+# TO IMPLEMENT MAN LEONG'S NEW LOGIC
+
+# get_distribution_usage_csv:
+#     handler: functions/get_distribution_usage_csv/handler.lambda_handler
+#     timeout: 30
+#     memorySize: 256
+#     reservedConcurrency: 4
+#     tags:
+#         CreatedBy: 'shashenta.rao@ecloudvalley.com'
+#         Environment: ${sls:stage}
+#         ProjectName: 'ECV MCDN'
+#         ServiceName: mcdn-bff-${sls:stage}
+#     events:
+#         - http:
+#               path: site/usage/export
+#               method: get
+#               cors:
+#                   origin: '*'
+#                   headers:
+#                       - Content-Type
+#                       - X-Amz-Date
+#                       - Authorization
+#                       - X-Api-Key
+#                       - X-Amz-Security-Token
+#                       - X-Amz-User-Agent
+#                       - authorizationToken
+#                       - type
+#                   allowCredentials: false
+#               authorizer:
+#                   name: mcdnAuthorizer
+#                   resultTtlInSeconds: 0
+#                   identitySource: method.request.header.authorizationToken
+
+getSiteUsage:
+    handler: functions/usage/get-site-usage/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/usage/list
+              method: post
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+listUsers:
+    handler: functions/users/list-users/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/users/list
+              method: get
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+addUser:
+    handler: functions/users/add-user/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/users/add
+              method: post
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+updateUserStatus:
+    handler: functions/users/update-user-status/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/users/status/{userId}
+              method: patch
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+# WE DONT NEED AUTHORIZER
+# TO DISABLE CUSTOMER WHO REGISTERS THROUGH PORTAL
+disableRegisteredUser:
+    handler: functions/users/disable-registered-user/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/users/disable/{userId}
+              method: patch
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+
+updateUserRole:
+    handler: functions/users/update-user-role/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/users/role/{userId}
+              method: patch
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+deleteUser:
+    handler: functions/users/delete-user/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/users/{userId}
+              method: delete
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+getUserRole:
+    handler: functions/users/get-user-role/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/users/role/{userId}
+              method: get
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+listRoles:
+    handler: functions/roles/list-roles/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/roles/list
+              method: get
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+getAccessLogs:
+    handler: functions/access-log/get-access-logs/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN MGMT TOOL'
+        ServiceName: mcdn-mgmt_tool-bff-${sls:stage}
+    events:
+        - http:
+              path: /mcdn/access-log/list
+              method: post
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+importCertificate:
+    handler: functions/certificates/import-cert/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/certificate/add
+              method: post
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+listCertificate:
+    handler: functions/certificates/list-cert/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/certificate/list
+              method: get
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+getCertificate:
+    handler: functions/certificates/get-cert/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/certificate/{id}
+              method: get
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+deleteCertificate:
+    handler: functions/certificates/delete-cert/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'logan.chandra@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/certificate/{id}
+              method: delete
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+getInvalidations:
+    handler: functions/invalidations/get-invalidations/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/invalidation/list
+              method: get
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
+
+addInvalidations:
+    handler: functions/invalidations/add-invalidations/handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    reservedConcurrency: 4
+    tags:
+        CreatedBy: 'shashenta.rao@ecloudvalley.com'
+        Environment: ${sls:stage}
+        ProjectName: 'ECV MCDN'
+        ServiceName: mcdn-bff-${sls:stage}
+    events:
+        - http:
+              path: mcdn/invalidation/add
+              method: post
+              cors:
+                  origin: '*'
+                  headers:
+                      - Content-Type
+                      - X-Amz-Date
+                      - Authorization
+                      - X-Api-Key
+                      - X-Amz-Security-Token
+                      - X-Amz-User-Agent
+                      - authorizationToken
+                      - type
+                  allowCredentials: false
+              authorizer:
+                  name: mcdnAuthorizer
+                  resultTtlInSeconds: 0
+                  identitySource: method.request.header.authorizationToken
