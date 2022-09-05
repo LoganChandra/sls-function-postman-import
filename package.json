@@ -1,6 +1,6 @@
 {
   "name": "clf-lambda-definition-2-postman-collection",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "Converts a cloudformation function definition into a JSON file that you can import using postman",
   "main": "index.js",
   "bin": "./index.js",

@@ -56,6 +56,9 @@ const handler = async () => {
 function createRequest(functionName, details, requestHeader, endpoint) {
 	requestHeader = JSON.parse(requestHeader)
 	let httpEvent = (details?.events || []).filter(ele => ele.http != undefined)[0]
+	if (httpEvent?.http == undefined) {
+		return
+	}
 	let postmanRequest = new Item({
 		name: functionName,
 		request: {
