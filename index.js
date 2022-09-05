@@ -6,9 +6,13 @@ const fs = require('fs')
 
 
 const handler = async () => {
+	if (process.argv.slice(2, process.argv.length).length < 4) {
+		console.log("ERROR The arguments must follow the following format npx clf-lambda-definition-2-postman-collection <definition> <endpoint> <name> <headers>")
+		return 0
+	}
 	let definitionInput = process.argv[0 + 2],
 		endpoint = process.argv[1 + 2],
-		name = process.argv[2 + 2],
+		name = process.argv[2 + 2].replace(/ /g, "-"),
 		headers = process.argv[3 + 2];
 
 	try {
@@ -37,14 +41,14 @@ const handler = async () => {
 		// JSONIFYING COLLECTION
 		const collectionJSON = postmanCollection.toJSON();
 
-		fs.writeFile("output.json", JSON.stringify(collectionJSON), function (err) {
+		fs.writeFile(`${name}.json`, JSON.stringify(collectionJSON), function (err) {
 			if (err) {
 				console.log(err);
 			}
 		});
 	} catch (e) {
 		console.log("ERROR", e)
-		throw new Error(e.response?.data.error || e);
+		return 0;
 	}
 };
 
